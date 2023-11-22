@@ -1,7 +1,10 @@
-import express, { Request, Response } from "express";
+import express, { Request, Response } from 'express';
 
 export const app = express();
 
-app.get("/", (req: Request, res: Response) => {
-  res.send("Hello World!");
+app.get('/', (req: Request, res: Response) => {
+  res.status(200).json({
+    success: true,
+    message: 'Server is running successfully',
+  });
 });
