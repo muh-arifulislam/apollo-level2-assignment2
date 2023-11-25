@@ -11,7 +11,7 @@ To get the Node server running locally:
     PORT= 5000
     DB_URL= //your_database_url
   ```
-- `npm run dev` to start the local server
+- `npm run start:dev` to start the local server
 
 # Code Overview
 
@@ -26,10 +26,10 @@ To get the Node server running locally:
 
 ## Application Structure
 
-- `app.js` - This file defines our express server and connects it to MongoDB using mongoose. It also requires the routes and models we'll be using in the application.
+- `app.js` - This file defines our app.Here we setup our application middlewares. It also requires the routes.
 - `server.js` - The entry point to our application. This file defines our express server and connects it to MongoDB using mongoose.
 - `config/` - This folder contains configuration for configuration/environment variables.
-- `modules/` - This folder contains the schema definitions for our Mongoose models.
+- `modules/` - This folder contains modules. Here we followed the modulers software design pattern.
 
 ## Routes
 
