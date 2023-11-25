@@ -31,7 +31,9 @@ const getSingleUserFromDB = async (userId: number) => {
 };
 
 const updateUserToDB = async (userId: number, user: TUser) => {
-  const result = User.findOneAndUpdate({ userId }, user, { new: true });
+  const result = User.findOneAndUpdate({ userId }, user, { new: true }).select(
+    '-password',
+  );
   return result;
 };
 
@@ -45,6 +47,39 @@ const addOrderIntoUserInDB = async (userId: number, order: TOrder) => {
   return result;
 };
 
+const getAllOrdersOfUserFromDB = async (userId: number) => {
+  const result = User.findOne({ userId }).select('orders -_id');
+  return result;
+};
+
+const getTotalPriceOfUserOrdersFromDB = async (userId: number) => {
+  const result = await User.aggregate([
+    {
+      $match: { userId: userId },
+    },
+    {
+      $unwind: '$orders',
+    },
+    {
+      $group: {
+        _id: null,
+        total: { $sum: { $multiply: ['$orders.price', '$orders.quantity'] } },
+      },
+    },
+    {
+      $project: {
+        totalAmount: '$total',
+      },
+    },
+  ]);
+  if (result.length > 0) {
+    const totalAmount = result[0].totalAmount;
+    return totalAmount;
+  } else {
+    return 0;
+  }
+};
+
 export const UserServices = {
   createUserIntoDB,
   getAllUsersFromDB,
@@ -52,4 +87,6 @@ export const UserServices = {
   updateUserToDB,
   deleteUserFromDB,
   addOrderIntoUserInDB,
+  getAllOrdersOfUserFromDB,
+  getTotalPriceOfUserOrdersFromDB,
 };

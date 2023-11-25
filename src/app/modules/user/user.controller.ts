@@ -177,6 +177,66 @@ const addOrder = async (req: Request, res: Response) => {
     });
   }
 };
+const getAllOrdersOfUser = async (req: Request, res: Response) => {
+  const { userId: userIdInput } = req.params;
+  const userId = parseInt(userIdInput);
+  try {
+    if (await User.isUserExists(userId)) {
+      const result = await UserServices.getAllOrdersOfUserFromDB(userId);
+      res.status(200).json({
+        success: true,
+        message: 'Order fetched successfully!',
+        data: result,
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'something is going wrong',
+      error,
+    });
+  }
+};
+const getTotalPricceOfOrders = async (req: Request, res: Response) => {
+  const { userId: userIdInput } = req.params;
+  const userId = parseInt(userIdInput);
+  try {
+    if (await User.isUserExists(userId)) {
+      const result = await UserServices.getTotalPriceOfUserOrdersFromDB(userId);
+      res.status(200).json({
+        success: true,
+        message: 'Total price calculated successfully!',
+        data: {
+          totalPrice: result,
+        },
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found',
+        error: {
+          code: 404,
+          description: 'User not found!',
+        },
+      });
+    }
+  } catch (error) {
+    res.status(400).json({
+      success: false,
+      message: 'something is going wrong',
+      error,
+    });
+  }
+};
 
 export const UserControllers = {
   createUser,
@@ -185,4 +245,6 @@ export const UserControllers = {
   updateUser,
   deleteUser,
   addOrder,
+  getAllOrdersOfUser,
+  getTotalPricceOfOrders,
 };
