@@ -1,16 +1,26 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
 import userValidationSchema from './user.validation';
+import { TUser } from './user.interface';
+import bcrypt from 'bcrypt';
 
 const createUser = async (req: Request, res: Response) => {
   const { user: userData } = req.body;
   try {
-    const parseResult = userValidationSchema.parse(userData);
-    // const result = await UserServices.createUserIntoDB(userData);
+    //validate user data
+    const validatedData = userValidationSchema.parse(userData);
+
+    // generate hashed password & replace it with user provided passowrd
+    const hashedPassword = await bcrypt.hash(validatedData.password, 10);
+    validatedData.password = hashedPassword;
+
+    //store data in database
+    const result = await UserServices.createUserIntoDB(validatedData as TUser);
+
     res.status(200).json({
       success: true,
       message: 'User created successfully',
-      // data: result,
+      data: result,
     });
   } catch (error) {
     res.status(400).json({
