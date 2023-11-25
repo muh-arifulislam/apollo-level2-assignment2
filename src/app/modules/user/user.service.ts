@@ -3,30 +3,21 @@ import User from './user.model';
 
 const createUserIntoDB = async (user: TUser) => {
   const result = await User.create(user);
-  return result;
+  const sanitizedUserData = User.findOne({ userId: result.userId }).select(
+    '-password',
+  );
+  return sanitizedUserData;
 };
 
 const getAllUsersFromDB = async () => {
-  const result = await User.aggregate([
-    {
-      $match: {},
-    },
-    {
-      $project: { password: 0 },
-    },
-  ]);
+  const result = await User.find().select(
+    'username fullName age email address -_id',
+  );
   return result;
 };
 
 const getSingleUserFromDB = async (userId: number) => {
-  const result = await User.aggregate([
-    {
-      $match: { userId: userId },
-    },
-    {
-      $project: { password: 0 },
-    },
-  ]);
+  const result = await User.findOne({ userId }).select('-password');
   return result;
 };
 
