@@ -50,16 +50,13 @@ const userValidationSchema = z.object({
     .string({ required_error: 'Email is required' })
     .email('Invalid email. Please enter a valid email'),
   isActive: z.boolean().default(true),
-  hobbies: z
-    .array(
-      z.string({
-        invalid_type_error: 'Invalid data type. Please enter a string',
-      }),
-    )
-    .nullable()
-    .nullish(),
+  hobbies: z.array(
+    z.string({
+      invalid_type_error: 'Invalid data type. Please enter a string',
+    }),
+  ),
   address: addressValidationSchema,
-  orders: z.array(orderValidationSchema).nullable().nullish(),
+  orders: z.array(orderValidationSchema).optional(),
 });
 
 export default userValidationSchema;
