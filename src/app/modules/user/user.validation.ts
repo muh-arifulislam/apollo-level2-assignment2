@@ -1,8 +1,14 @@
 import { z } from 'zod';
 
 const fullNameValidationSchema = z.object({
-  firstName: z.string({ required_error: 'First name is required' }),
-  lastName: z.string({ required_error: 'Last name is required' }),
+  firstName: z.string({
+    required_error: 'First name is required',
+    invalid_type_error: 'Invalid data type. Please enter a string',
+  }),
+  lastName: z.string({
+    required_error: 'Last name is required',
+    invalid_type_error: 'Invalid data type. Please enter a string',
+  }),
 });
 
 const addressValidationSchema = z.object({
@@ -58,5 +64,7 @@ const userValidationSchema = z.object({
   address: addressValidationSchema,
   orders: z.array(orderValidationSchema).optional(),
 });
+
+export const userUpdateValidationSchema = userValidationSchema.partial();
 
 export default userValidationSchema;

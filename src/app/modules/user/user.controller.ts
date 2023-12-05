@@ -1,12 +1,14 @@
 import { Request, Response } from 'express';
 import { UserServices } from './user.service';
-import userValidationSchema from './user.validation';
+import userValidationSchema, {
+  userUpdateValidationSchema,
+} from './user.validation';
 import { TUser } from './user.interface';
 import bcrypt from 'bcrypt';
 import User from './user.model';
 
 const createUser = async (req: Request, res: Response) => {
-  const { user: userData } = req.body;
+  const userData = req.body;
   try {
     //validate user data
     const validatedData = userValidationSchema.parse(userData);
@@ -80,17 +82,19 @@ const getUser = async (req: Request, res: Response) => {
 };
 
 const updateUser = async (req: Request, res: Response) => {
-  const { user: userData } = req.body;
+  const userData = req.body;
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
   try {
-    //validate user data
-    const validatedData = userValidationSchema.parse(userData);
+    //user update validation schema
+
+    const validatedData = userUpdateValidationSchema.parse(userData);
 
     // generate hashed password & replace it with user provided passowrd
-    const hashedPassword = await bcrypt.hash(validatedData.password, 10);
-    validatedData.password = hashedPassword;
-
+    if (validatedData.password) {
+      const hashedPassword = await bcrypt.hash(validatedData.password, 10);
+      validatedData.password = hashedPassword;
+    }
     if (await User.isUserExists(userId)) {
       const result = await UserServices.updateUserToDB(userId, validatedData);
       res.status(200).json({
@@ -148,7 +152,7 @@ const deleteUser = async (req: Request, res: Response) => {
 };
 
 const addOrder = async (req: Request, res: Response) => {
-  const { order: orderData } = req.body;
+  const orderData = req.body;
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
   try {

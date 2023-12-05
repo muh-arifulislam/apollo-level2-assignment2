@@ -21,7 +21,7 @@ const getSingleUserFromDB = async (userId: number) => {
   return result;
 };
 
-const updateUserToDB = async (userId: number, user: TUser) => {
+const updateUserToDB = async (userId: number, user: Partial<TUser>) => {
   const result = User.findOneAndUpdate({ userId }, user, { new: true }).select(
     '-password',
   );
