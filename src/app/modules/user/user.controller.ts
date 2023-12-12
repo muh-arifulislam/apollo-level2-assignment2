@@ -54,6 +54,19 @@ const getAllUsersData = async (req: Request, res: Response) => {
 const getUser = async (req: Request, res: Response) => {
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
+
   try {
     if (await User.isUserExists(userId)) {
       const result = await UserServices.getSingleUserFromDB(userId);
@@ -85,6 +98,18 @@ const updateUser = async (req: Request, res: Response) => {
   const userData = req.body;
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
   try {
     //user update validation schema
 
@@ -124,6 +149,18 @@ const updateUser = async (req: Request, res: Response) => {
 const deleteUser = async (req: Request, res: Response) => {
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
   try {
     if (await User.isUserExists(userId)) {
       await UserServices.deleteUserFromDB(userId);
@@ -155,6 +192,18 @@ const addOrder = async (req: Request, res: Response) => {
   const orderData = req.body;
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
   try {
     if (await User.isUserExists(userId)) {
       await UserServices.addOrderIntoUserInDB(userId, orderData);
@@ -184,6 +233,18 @@ const addOrder = async (req: Request, res: Response) => {
 const getAllOrdersOfUser = async (req: Request, res: Response) => {
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
   try {
     if (await User.isUserExists(userId)) {
       const result = await UserServices.getAllOrdersOfUserFromDB(userId);
@@ -213,6 +274,18 @@ const getAllOrdersOfUser = async (req: Request, res: Response) => {
 const getTotalPricceOfOrders = async (req: Request, res: Response) => {
   const { userId: userIdInput } = req.params;
   const userId = parseInt(userIdInput);
+
+  //validate userId type - if userId is given in string or boolean that will return response user not found.
+  if (!userId) {
+    return res.status(404).json({
+      success: false,
+      message: 'User not found',
+      error: {
+        code: 404,
+        description: 'User not found!',
+      },
+    });
+  }
   try {
     if (await User.isUserExists(userId)) {
       const result = await UserServices.getTotalPriceOfUserOrdersFromDB(userId);

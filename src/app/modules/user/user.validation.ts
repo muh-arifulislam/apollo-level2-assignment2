@@ -41,12 +41,10 @@ const userValidationSchema = z.object({
     required_error: 'Username is required',
     invalid_type_error: 'Invalid data type. Please enter a string.',
   }),
-  password: z
-    .string({ required_error: 'Password is required' })
-    .regex(
-      /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/,
-      'Password must contain at least eight characters, one number, one capital letter and one special characters',
-    ),
+  password: z.string({
+    required_error: 'Password is required',
+    invalid_type_error: 'Invalid data type. Please enter a string.',
+  }),
   fullName: fullNameValidationSchema,
   age: z.number({
     required_error: 'Age is required',
